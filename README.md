@@ -1,8 +1,10 @@
 # visonic_control
 
-This project consists of basic PHP scripts to arm, disarm and check status of a Visonic PowerMaster security alarm by emulating the Visonic Go app talking to the web service which is connected to a PowerLink 3 module in the alarm.
+This project consists of basic PHP scripts to arm, disarm and check status of a Visonic PowerMaster security alarm by emulating the Visonic Go app talking to the RESTful web service which is connected to a PowerLink 3 module in the alarm.
 
-These scripts are quick and dirty - I'm sure somebody with better PHP skills can improve them but they get the job done. The workings of the web service were determined via the Charles Web Debugging Proxy monitoring the Visonic Go app.
+These scripts are quick and dirty - I'm sure somebody with better PHP skills can improve them but they get the job done. The workings of the web service were determined via the Charles Web Debugging Proxy monitoring the Visonic Go app. 
+
+Of course this is unsupported by Visonic - they don't publish their REST API. It is also unsupported by me. I accept no liability for your use of the scripts nor for any loss or damage resulting from security breaches at your property.
 
 **Of particular note is that all SSL checking is disabled when connecting to the Visonic service. This is _clearly_ a VERY BAD IDEA. But it works.**
 
@@ -21,11 +23,11 @@ These scripts are quick and dirty - I'm sure somebody with better PHP skills can
 
 Edit the config.php file and change the following values:
 
-- USER_CODE : should be a valid user code on your alarm - a PIN you can use at the keypad to arm and disarm the alarm. I created a special code just for these scripts.
-- PANEL_WEB_NAME : should be the panel web name displayed in the settings of your control panel and as used in the Visonic Go app.
-- HOST : should be the host name specified in your Visonic Go app
-- PARTITION : should be the internal name of the partition you want to arm/disarm - in single partition systems it will be P1" or you can say "ALL"
-- USER_ID : should be a unique Version 4 UID generated at https://www.uuidgenerator.net/version4 - think of this as identifying your scripts as a unique device to Visonic
+- **USER_CODE** : should be a valid user code on your alarm - a PIN you can use at the keypad to arm and disarm the alarm. I created a special user code just for these scripts so that I can differentiate scripted access from control panel access.
+- **PANEL_WEB_NAME** : should be the panel web name displayed in the settings of your control panel and as used in the Visonic Go app.
+- **HOST** : should be the host name specified in your Visonic Go app.
+- **PARTITION** : should be the internal name of the partition you want to arm/disarm - in single partition systems it will be "P1" or you can use "ALL" to have the scripts arm the whole system.
+- **USER_ID** : should be a unique Version 4 UUID generated at https://www.uuidgenerator.net/version4 - think of this as identifying your scripts as a unique device to Visonic - if you have multiple Visonic Go apps they will each have their own UUID.
 
 All other settings in the config.php can probably be left unchanged unless Visonic modify their web service.
 
@@ -43,10 +45,12 @@ Where neccesary the PHP script will call the login or status scripts to achieve 
 
 Use Home Assistant (https://home-assistant.io) to create a Command Line Switch which you can then control with Amazon Echo (Alexa) or via HomeBridge (https://github.com/nfarina/homebridge) with Apple Siri. So you can say "Turn on burglar alarm" to arm your system via Alexa.
 
-You might like to configure Home Assistant to only allow Alexa to arm the system so that strangers can't walk into your home and tell Alexa to disarm it.
+You might like to configure Home Assistant Command Line Switch to only allow Alexa to arm the system so that strangers can't walk into your home and tell Alexa to disarm it.
+
+You could probably do something similar with FauxMo (https://github.com/makermusings/fauxmo) which is a fake WeMo switch. I haven't tried that but can't see why it wouldn't work.
 
 # behind the scenes 
 
-- The Visonic Go app and these scripts use your credentials to post to the LOGIN_URI
-- It then monitors the STATUS_URI until the panel is connected - this can take a few attempts
+- The Visonic Go app and these scripts use your configured credentials to post to the LOGIN_URI
+- It then monitors the STATUS_URI until the panel is connected - this can take a little while so it will make a few attempts
 - Once connected it displays status and, if required, makes further calls to the ARM_URI or DISARM_URI to change the system status
