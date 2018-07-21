@@ -19,9 +19,7 @@ Of course this is unsupported by Visonic - they don't publish their REST API. It
 
 **It goes without saying that anybody with access to the web server can arm and disarm your alarm so take a moment to think about that risk and make sure it is secured appropriately.**
 
-# set-up
-
-Edit the config.php file and change the following values:
+# usage
 
 - **USER_CODE** : should be a valid user code on your alarm - a PIN you can use at the keypad to arm and disarm the alarm. I created a special user code just for these scripts so that I can differentiate scripted access from control panel access.
 - **PANEL_WEB_NAME** : should be the panel web name displayed in the settings of your control panel and as used in the Visonic Go app.
@@ -29,9 +27,9 @@ Edit the config.php file and change the following values:
 - **PARTITION** : should be the internal name of the partition you want to arm/disarm - in single partition systems it will be "P1" or you can use "ALL" to have the scripts arm the whole system.
 - **USER_ID** : should be a unique Version 4 UUID generated at https://www.uuidgenerator.net/version4 - think of this as identifying your scripts as a unique device to Visonic - if you have multiple Visonic Go apps they will each have their own UUID.
 
-All other settings in the config.php can probably be left unchanged unless Visonic modify their web service.
-
-# usage
+```
+docker run --rm -ti -p 8099:80 -e USER_CODE=XXXX -e PANEL_WEB_NAME=XXXXX -e HOST=XXXXX -e USER_ID=`uuidgen chrisns/visonic
+```
 
 Point your browser at one of the PHP files to activate the required function namely:
 
