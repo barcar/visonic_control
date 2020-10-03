@@ -1,5 +1,9 @@
 # visonic_control
 
+** STOP: Visonic changed their API (to v8 according to https://visonic.tycomonitor.com/rest_api/version) so this approach no longer works. This project might be your best bet going forward: https://github.com/And3rsL/VisonicAlarm2. Their commits reference upgrading to API v8** 
+
+----------
+ 
 This project consists of basic PHP scripts to arm, disarm and check status of a Visonic PowerMaster security alarm by emulating the Visonic Go app talking to the RESTful web service which is connected to a PowerLink 3 module in the alarm.
 
 These scripts are quick and dirty - I'm sure somebody with better PHP skills can improve them but they get the job done. The workings of the web service were determined via the Charles Web Debugging Proxy monitoring the Visonic Go app. 
